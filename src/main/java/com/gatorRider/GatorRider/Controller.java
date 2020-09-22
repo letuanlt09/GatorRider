@@ -15,7 +15,7 @@ import java.sql.Statement;
 public class Controller {
 	@GetMapping("/hello")
 	public String hello() {
-		return "Hello Hihi";
+		return "Hello";
 	}
 
 	@PostMapping(value = "/newUser", consumes = "application/json")

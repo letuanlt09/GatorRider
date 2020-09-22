@@ -6,16 +6,43 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.Statement;
+import java.sql.*;
+import java.util.ArrayList;
 
 @RestController
 public class Controller {
 	@GetMapping("/hello")
 	public String hello() {
 		return "You are in GatorRider";
+	}
+
+	@GetMapping("/users")
+	public ArrayList<TryUser> getUsers() {
+		ArrayList<TryUser> result = new ArrayList<>();
+		try {
+			String connectionString = "jdbc:sqlserver://cis4914.database.windows.net:1433;database=cis4914;user=cis4914@cis4914;password=gatorRider$;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+			Connection conn = DriverManager.getConnection(connectionString);
+			Statement stmt = conn.createStatement();
+			ResultSet rs;
+
+			rs = stmt.executeQuery("SELECT * FROM trial");
+			while ( rs.next() ) {
+				String email = rs.getString("email");
+				String password = rs.getString("password");
+				System.out.println(email);
+
+				TryUser tryUser = new TryUser();
+				tryUser.email = email;
+				tryUser.password = password;
+
+				result.add(tryUser);
+			}
+			conn.close();
+		} catch (Exception e) {
+			System.err.println("Got an exception! ");
+			System.err.println(e.getMessage());
+		}
+		return result;
 	}
 
 	@PostMapping(value = "/newUser", consumes = "application/json")
@@ -28,10 +55,7 @@ public class Controller {
 		String connectionString = "jdbc:sqlserver://cis4914.database.windows.net:1433;database=cis4914;user=cis4914@cis4914;password=gatorRider$;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 		try
 		{
-//			Class.forName("com.mysql.jdbc.Driver");
 			connection = DriverManager
-//					.getConnection(connectionString, "root", "password");
-
 					.getConnection(connectionString);
 
 			PreparedStatement preparedStatement = connection.prepareStatement(sql);

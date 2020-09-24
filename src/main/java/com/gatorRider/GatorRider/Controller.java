@@ -24,20 +24,16 @@ public class Controller {
 			Connection conn = DriverManager.getConnection(connectionString);
 			Statement stmt = conn.createStatement();
 			ResultSet rs;
-			result.add(new TryUser("StartQuery",""));
-
 
 			rs = stmt.executeQuery("SELECT * FROM trial");
 			while ( rs.next() ) {
-				System.out.println("Come in rs.next)" + rs.getString("email"));
 				String email = rs.getString("email");
 				String password = rs.getString("password");
 
-				result.add(new TryUser("somehting", password));
+				result.add(new TryUser(email, password));
 			}
 			conn.close();
 		} catch (Exception e) {
-			result.add(new TryUser(e.getMessage(),""));
 			System.err.println("Got an exception! ");
 			System.err.println(e.getMessage());
 		}

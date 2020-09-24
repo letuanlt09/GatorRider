@@ -34,6 +34,7 @@ public class Controller {
 			}
 			conn.close();
 		} catch (Exception e) {
+			result.add(new TryUser(e.getMessage(),""));
 			System.err.println("Got an exception! ");
 			System.err.println(e.getMessage());
 		}

@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.io.Console;
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -24,9 +25,12 @@ public class Controller {
 			Connection conn = DriverManager.getConnection(connectionString);
 			Statement stmt = conn.createStatement();
 			ResultSet rs;
+			System.out.println("Satart query:");
+
 
 			rs = stmt.executeQuery("SELECT * FROM trial");
 			while ( rs.next() ) {
+				System.out.println("Come in rs.next)" + rs.getString("email"));
 				String email = rs.getString("email");
 				String password = rs.getString("password");
 				System.out.println(email);

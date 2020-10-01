@@ -32,7 +32,7 @@ public class Ride {
     private String modelName;
 
     @NonNull
-    private String riderIntro;
+    private String rideIntro;
 
     @NonNull
     @ManyToOne
@@ -99,12 +99,12 @@ public class Ride {
     }
 
     @NonNull
-    public String getRiderIntro() {
-        return riderIntro;
+    public String getRideIntro() {
+        return rideIntro;
     }
 
-    public void setRiderIntro(@NonNull String riderIntro) {
-        this.riderIntro = riderIntro;
+    public void setRideIntro(@NonNull String riderIntro) {
+        this.rideIntro = riderIntro;
     }
 
     @NonNull

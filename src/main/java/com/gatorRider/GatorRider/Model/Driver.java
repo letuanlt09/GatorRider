@@ -7,7 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-public class Users {
+public class Driver {
 
     public Long getId() {
         return id;
@@ -32,7 +32,7 @@ public class Users {
     @NonNull
     private char gender;
 
-    public Users(String fullName, String phone, String email, String passwordHash, char gender) {
+    public Driver(String fullName, String phone, String email, String passwordHash, char gender) {
         this.fullName = fullName;
         this.phone = phone;
         this.email = email;
@@ -40,7 +40,7 @@ public class Users {
         this.gender = gender;
     }
 
-    public Users() {
+    public Driver() {
 
     }
 

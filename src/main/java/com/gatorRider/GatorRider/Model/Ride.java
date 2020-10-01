@@ -36,7 +36,7 @@ public class Ride {
 
     @NonNull
     @ManyToOne
-    private Users driver;
+    private Driver driver;
 
     public Long getId() {
         return id;
@@ -108,11 +108,11 @@ public class Ride {
     }
 
     @NonNull
-    public Users getDriver() {
+    public Driver getDriver() {
         return driver;
     }
 
-    public void setDriver(@NonNull Users driver) {
+    public void setDriver(@NonNull Driver driver) {
         this.driver = driver;
     }
 }

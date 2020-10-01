@@ -5,14 +5,20 @@ import com.gatorRider.GatorRider.Repository.DriverRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
 public class DriverService implements org.hibernate.service.Service {
     @Autowired
-    private DriverRepository usersRepository;
+    private DriverRepository driverRepository;
 
     public List<Driver> getAllDriver() {
-        return usersRepository.findAll();
+        return driverRepository.findAll();
+    }
+
+    @Transactional
+    public Driver createDriver(Driver driver) {
+        return driverRepository.save(driver);
     }
 }

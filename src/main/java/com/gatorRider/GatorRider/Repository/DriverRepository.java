@@ -9,4 +9,6 @@ import java.util.List;
 @Repository
 public interface DriverRepository extends JpaRepository<Driver, Long> {
     List<Driver> findAll();
+    Driver save(Driver driver);
+    Driver findByEmail(String email);
 }

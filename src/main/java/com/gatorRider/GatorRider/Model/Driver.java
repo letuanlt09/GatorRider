@@ -4,17 +4,17 @@ import org.springframework.lang.NonNull;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Driver {
-
+    @NonNull
     public Long getId() {
         return id;
     }
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
 
     @NonNull

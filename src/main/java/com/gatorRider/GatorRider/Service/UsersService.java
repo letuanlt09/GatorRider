@@ -13,6 +13,6 @@ public class UsersService implements org.hibernate.service.Service {
     private UsersRepository usersRepository;
 
     public List<Users> getAllUsers() {
-        return (List<Users>) usersRepository.findAll();
+        return usersRepository.findAll();
     }
 }

@@ -19,4 +19,10 @@ public class UserController {
     public List<Users> getAllUsers() {
         return usersService.getAllUsers();
     }
+    @GetMapping("/test")
+    public String test() {
+        return "Hello I am here";
+    }
+    //dfsdfsd
+
 }

@@ -1,5 +1,6 @@
 package com.gatorRider.GatorRider.Model;
 
+import lombok.ToString;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.*;
@@ -7,11 +8,13 @@ import java.sql.Time;
 import java.sql.Date;
 
 @Entity
+@ToString
 public class Ride {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id;
+
 
     @NonNull
     private Date date;

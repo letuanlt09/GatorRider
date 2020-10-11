@@ -3,6 +3,8 @@ package com.gatorRider.GatorRider.Controller;
 import com.gatorRider.GatorRider.Model.Driver;
 import com.gatorRider.GatorRider.Service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.NoSuchAlgorithmException;
@@ -21,14 +23,22 @@ public class DriverController {
     }
 
     @PostMapping("/create")
-    public String createNewDriver(@RequestBody Driver driver) throws InvalidKeySpecException, NoSuchAlgorithmException {
-        return driverService.createDriver(driver);
+    public ResponseEntity<String> createNewDriver(@RequestBody Driver driver) throws InvalidKeySpecException, NoSuchAlgorithmException {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(driverService.createDriver(driver));
+        } catch(Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+
     }
 
     @GetMapping("/{id}")
-    public Driver GetDriver(@PathVariable String id) {
+    public ResponseEntity<Driver> GetDriver(@PathVariable String id) {
         return driverService.getOne(id).isPresent() ?
-                driverService.getOne(id).get() : null;
+                ResponseEntity.status(HttpStatus.OK).body(driverService.getOne(id).get()) :
+                ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
     }
 
 

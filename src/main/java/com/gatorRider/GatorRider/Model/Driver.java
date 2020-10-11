@@ -1,35 +1,38 @@
 package com.gatorRider.GatorRider.Model;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.lang.NonNull;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
 public class Driver {
-    @NonNull
-    public Long getId() {
-        return id;
-    }
-
-    @Id @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    @Id
+    @Getter
+    @Setter
+    private String id;
 
     @NonNull
+    @Getter
     private String fullName;
 
     @NonNull
+    @Getter
     private String phone;
 
     @NonNull
+    @Getter
     private String email;
 
     @NonNull
+    @Getter
+    @Setter
     private String passwordHash;
 
     @NonNull
+    @Getter
     private char gender;
 
     public Driver(String fullName, String phone, String email, String passwordHash, char gender) {
@@ -42,49 +45,5 @@ public class Driver {
 
     public Driver() {
 
-    }
-
-    @NonNull
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(@NonNull String fullName) {
-        this.fullName = fullName;
-    }
-
-    @NonNull
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(@NonNull String phone) {
-        this.phone = phone;
-    }
-
-    @NonNull
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(@NonNull String email) {
-        this.email = email;
-    }
-
-    @NonNull
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public void setPasswordHash(@NonNull String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public char getGender() {
-        return gender;
-    }
-
-    public void setGender(char gender) {
-        this.gender = gender;
     }
 }

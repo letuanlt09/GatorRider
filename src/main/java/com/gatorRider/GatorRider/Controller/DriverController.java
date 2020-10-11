@@ -3,12 +3,10 @@ package com.gatorRider.GatorRider.Controller;
 import com.gatorRider.GatorRider.Model.Driver;
 import com.gatorRider.GatorRider.Service.DriverService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.util.List;
 
 @RestController
@@ -21,9 +19,16 @@ public class DriverController {
     public List<Driver> getAllDriver() {
         return driverService.getAllDriver();
     }
+
     @PostMapping("/create")
-    public Driver createNewDriver(@RequestBody Driver driver) {
+    public String createNewDriver(@RequestBody Driver driver) throws InvalidKeySpecException, NoSuchAlgorithmException {
         return driverService.createDriver(driver);
+    }
+
+    @GetMapping("/{id}")
+    public Driver GetDriver(@PathVariable String id) {
+        return driverService.getOne(id).isPresent() ?
+                driverService.getOne(id).get() : null;
     }
 
 

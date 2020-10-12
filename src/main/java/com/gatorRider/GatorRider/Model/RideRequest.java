@@ -18,6 +18,6 @@ public class RideRequest {
     private int modelYear;
     private int numSeatAvailable;
     private String rideIntro;
-    private Long driverId;
+    private String driverId;
     private Long rideId;
 }

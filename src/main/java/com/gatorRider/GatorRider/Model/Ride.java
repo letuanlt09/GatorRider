@@ -1,5 +1,7 @@
 package com.gatorRider.GatorRider.Model;
 
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 import org.springframework.lang.NonNull;
 
@@ -12,110 +14,50 @@ import java.sql.Date;
 public class Ride {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
-
+    @Getter
+    @Setter
+    private String id;
 
     @NonNull
+    @Getter
+    @Setter
     private Date date;
 
     @NonNull
+    @Getter
+    @Setter
     private Time time;
 
     @NonNull
+    @Getter
+    @Setter
     private String destination;
 
     @NonNull
+    @Getter
+    @Setter
     private int numSeatAvailable;
 
     @NonNull
+    @Getter
+    @Setter
     private int modelYear;
 
     @NonNull
+    @Getter
+    @Setter
     private String modelName;
 
     @NonNull
+    @Getter
+    @Setter
     private String rideIntro;
 
     @NonNull
     @ManyToOne
+    @Getter
+    @Setter
     private Driver driver;
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @NonNull
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(@NonNull Date date) {
-        this.date = date;
-    }
-
-    @NonNull
-    public Time getTime() {
-        return time;
-    }
-
-    public void setTime(@NonNull Time time) {
-        this.time = time;
-    }
-
-    @NonNull
-    public String getDestination() {
-        return destination;
-    }
-
-    public void setDestination(@NonNull String destination) {
-        this.destination = destination;
-    }
-
-    public int getNumSeatAvailable() {
-        return numSeatAvailable;
-    }
-
-    public void setNumSeatAvailable(int numSeatAvailable) {
-        this.numSeatAvailable = numSeatAvailable;
-    }
-
-    public int getModelYear() {
-        return modelYear;
-    }
-
-    public void setModelYear(int modelYear) {
-        this.modelYear = modelYear;
-    }
-
-    @NonNull
-    public String getModelName() {
-        return modelName;
-    }
-
-    public void setModelName(@NonNull String modelName) {
-        this.modelName = modelName;
-    }
-
-    @NonNull
-    public String getRideIntro() {
-        return rideIntro;
-    }
-
-    public void setRideIntro(@NonNull String riderIntro) {
-        this.rideIntro = riderIntro;
-    }
-
-    @NonNull
-    public Driver getDriver() {
-        return driver;
-    }
-
-    public void setDriver(@NonNull Driver driver) {
-        this.driver = driver;
-    }
 }

@@ -21,9 +21,9 @@ public class RideController {
     public void createRide(@RequestBody RideRequest rideRequest) {
         rideService.createRide(rideRequest);
     }
-    @GetMapping("/retrieveRide")
-    public List<Ride> retrieveMyRide(@RequestParam Long driverId){
-        return rideService.getMyRide(driverId) ;
+    @GetMapping("/retrieveRide/{id}")
+    public List<Ride> retrieveMyRide(@PathVariable String id){
+        return rideService.getMyRide(id) ;
     }
     @PostMapping("/updateRide")
     public void updateRide(@RequestBody RideRequest rideRequest){

@@ -35,7 +35,7 @@ public class RideService implements org.hibernate.service.Service {
         System.out.println(ride);
         rideRepository.save(ride);
     }
-    public List<Ride> getMyRide(Long driverId){
+    public List<Ride> getMyRide(String driverId){
         List<Ride> allRide = rideRepository.findAll();
         List<Ride> result = new ArrayList<>();
         for(Ride tempRide: allRide){

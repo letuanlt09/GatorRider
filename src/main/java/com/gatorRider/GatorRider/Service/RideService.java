@@ -6,7 +6,7 @@ import com.gatorRider.GatorRider.Repository.DriverRepository;
 import com.gatorRider.GatorRider.Repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.lang.Long;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -56,7 +56,7 @@ public class RideService implements org.hibernate.service.Service {
         ride.setRideIntro(rideRequest.getRideIntro());
         rideRepository.save(ride);
     }
-    public void deleteRide(Long rideId){
+    public void deleteRide(String rideId){
         rideRepository.deleteById(rideId);
     }
 

@@ -29,8 +29,8 @@ public class RideController {
     public void updateRide(@RequestBody RideRequest rideRequest){
         rideService.updateRide(rideRequest);
     }
-    @GetMapping("/deleteRide")
-    public void deleteRide(@RequestParam Long rideId){
+    @DeleteMapping("/deleteRide/{rideId}")
+    public void deleteRide(@PathVariable String rideId){
         rideService.deleteRide(rideId) ;
     }
 }

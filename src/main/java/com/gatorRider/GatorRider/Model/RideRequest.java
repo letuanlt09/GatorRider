@@ -19,5 +19,5 @@ public class RideRequest {
     private int numSeatAvailable;
     private String rideIntro;
     private String driverId;
-    private Long rideId;
+    private String rideId;
 }

@@ -5,6 +5,8 @@ import com.gatorRider.GatorRider.Model.RideRequest;
 import com.gatorRider.GatorRider.Repository.DriverRepository;
 import com.gatorRider.GatorRider.Repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,7 +23,8 @@ public class RideService implements org.hibernate.service.Service {
     public List<Ride> getAllRides() {
         return rideRepository.findAll();
     }
-    public void createRide(RideRequest rideRequest){
+    public String createRide(RideRequest rideRequest) throws Exception {
+        rideRequest.validation();
         Ride ride = new Ride();
         ride.setId(UUID.randomUUID().toString());
         ride.setDate(rideRequest.getDate());
@@ -32,8 +35,7 @@ public class RideService implements org.hibernate.service.Service {
         ride.setNumSeatAvailable(rideRequest.getNumSeatAvailable());
         ride.setRideIntro(rideRequest.getRideIntro());
         ride.setDriver(driverRepository.getOne(rideRequest.getDriverId()));
-        System.out.println(ride);
-        rideRepository.save(ride);
+        return rideRepository.save(ride).getId();
     }
     public List<Ride> getMyRide(String driverId){
         List<Ride> allRide = rideRepository.findAll();
@@ -45,7 +47,8 @@ public class RideService implements org.hibernate.service.Service {
         }
         return result;
     }
-    public void updateRide(RideRequest rideRequest){
+    public String updateRide(RideRequest rideRequest) throws Exception{
+        rideRequest.validation();
         Ride ride = rideRepository.getOne(rideRequest.getRideId());
         ride.setDate(rideRequest.getDate());
         ride.setTime(rideRequest.getTime());
@@ -54,7 +57,7 @@ public class RideService implements org.hibernate.service.Service {
         ride.setModelYear(rideRequest.getModelYear());
         ride.setNumSeatAvailable(rideRequest.getNumSeatAvailable());
         ride.setRideIntro(rideRequest.getRideIntro());
-        rideRepository.save(ride);
+        return rideRepository.save(ride).getId();
     }
     public void deleteRide(String rideId){
         rideRepository.deleteById(rideId);

@@ -4,6 +4,8 @@ import com.gatorRider.GatorRider.Model.Ride;
 import com.gatorRider.GatorRider.Model.RideRequest;
 import com.gatorRider.GatorRider.Service.RideService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -18,16 +20,28 @@ public class RideController {
         return rideService.getAllRides();
     }
     @PostMapping("/createRide")
-    public void createRide(@RequestBody RideRequest rideRequest) {
-        rideService.createRide(rideRequest);
+    public ResponseEntity<String> createRide(@RequestBody RideRequest rideRequest) {
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(rideService.createRide(rideRequest));
+        } catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
     }
-    @GetMapping("/retrieveRide/{id}")
-    public List<Ride> retrieveMyRide(@PathVariable String id){
-        return rideService.getMyRide(id) ;
+    @GetMapping("/retrieveRide/{driverId}")
+    public List<Ride> retrieveMyRide(@PathVariable String driverId){
+        return rideService.getMyRide(driverId) ;
     }
     @PostMapping("/updateRide")
-    public void updateRide(@RequestBody RideRequest rideRequest){
-        rideService.updateRide(rideRequest);
+    public ResponseEntity<String> updateRide(@RequestBody RideRequest rideRequest){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(rideService.updateRide(rideRequest));
+        } catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
     }
     @DeleteMapping("/deleteRide/{rideId}")
     public void deleteRide(@PathVariable String rideId){

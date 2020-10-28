@@ -20,4 +20,9 @@ public class RideRequest {
     private String rideIntro;
     private String driverId;
     private String rideId;
+    public void validation () throws Exception{
+        if(numSeatAvailable>9){
+            throw new Exception("Number of Seat must less or equal than 9");
+        }
+    }
 }

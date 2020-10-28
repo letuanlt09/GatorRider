@@ -13,4 +13,5 @@ public interface DriverRepository extends JpaRepository<Driver, String> {
     Driver save(Driver driver);
     Driver findByEmail(String email);
     Optional<Driver> findById(String id);
+    Driver findByPhone(String phone);
 }

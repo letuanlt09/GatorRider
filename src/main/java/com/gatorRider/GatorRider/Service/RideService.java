@@ -63,17 +63,17 @@ public class RideService implements org.hibernate.service.Service {
         rideRepository.deleteById(rideId);
     }
 
-    @Scheduled(cron="0 0 24 ? * *")
-        public void autoDelete(){
-            List<Ride> allRide = rideRepository.findAll();
-            Date date = new Date();
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
-            c.add(Calendar.DATE,-1);
-            for(Ride i: allRide){
-                if(c.getTime().after(i.getDate())){
-                    rideRepository.delete(i);
-                }
+    @Scheduled(cron="0 0 0 ? * *")
+    public void autoDelete(){
+        List<Ride> allRide = rideRepository.findAll();
+        Date date = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.DATE,-1);
+        for(Ride i: allRide){
+            if(c.getTime().after(i.getDate())){
+                rideRepository.delete(i);
             }
         }
     }
+}

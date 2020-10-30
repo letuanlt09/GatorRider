@@ -7,11 +7,11 @@ import com.gatorRider.GatorRider.Repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class RideService implements org.hibernate.service.Service {
@@ -63,4 +63,17 @@ public class RideService implements org.hibernate.service.Service {
         rideRepository.deleteById(rideId);
     }
 
-}
+    @Scheduled(cron="0 0 24 ? * *")
+        public void autoDelete(){
+            List<Ride> allRide = rideRepository.findAll();
+            Date date = new Date();
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            c.add(Calendar.DATE,-1);
+            for(Ride i: allRide){
+                if(c.getTime().after(i.getDate())){
+                    rideRepository.delete(i);
+                }
+            }
+        }
+    }

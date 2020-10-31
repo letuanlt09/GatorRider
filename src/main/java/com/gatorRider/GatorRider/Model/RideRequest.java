@@ -4,15 +4,13 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import java.sql.Time;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Setter
 @Getter
 @ToString
 public class RideRequest {
-    private Date date;
-    private Time time;
+    private Timestamp dateTime;
     private String destination;
     private String modelName;
     private int modelYear;

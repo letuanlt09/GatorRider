@@ -5,12 +5,8 @@ import com.gatorRider.GatorRider.Model.RideRequest;
 import com.gatorRider.GatorRider.Repository.DriverRepository;
 import com.gatorRider.GatorRider.Repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -27,8 +23,7 @@ public class RideService implements org.hibernate.service.Service {
         rideRequest.validation();
         Ride ride = new Ride();
         ride.setId(UUID.randomUUID().toString());
-        ride.setDate(rideRequest.getDate());
-        ride.setTime(rideRequest.getTime());
+        ride.setDateTime(rideRequest.getDateTime());
         ride.setDestination(rideRequest.getDestination());
         ride.setModelName(rideRequest.getModelName());
         ride.setModelYear(rideRequest.getModelYear());
@@ -38,20 +33,12 @@ public class RideService implements org.hibernate.service.Service {
         return rideRepository.save(ride).getId();
     }
     public List<Ride> getMyRide(String driverId){
-        List<Ride> allRide = rideRepository.findAll();
-        List<Ride> result = new ArrayList<>();
-        for(Ride tempRide: allRide){
-            if(tempRide.getDriver().getId().equals(driverId)){
-                result.add(tempRide);
-            }
-        }
-        return result;
+        return rideRepository.findByDriverId(driverId);
     }
     public String updateRide(RideRequest rideRequest) throws Exception{
         rideRequest.validation();
         Ride ride = rideRepository.getOne(rideRequest.getRideId());
-        ride.setDate(rideRequest.getDate());
-        ride.setTime(rideRequest.getTime());
+        ride.setDateTime(rideRequest.getDateTime());
         ride.setDestination(rideRequest.getDestination());
         ride.setModelName(rideRequest.getModelName());
         ride.setModelYear(rideRequest.getModelYear());
@@ -63,17 +50,14 @@ public class RideService implements org.hibernate.service.Service {
         rideRepository.deleteById(rideId);
     }
 
-    @Scheduled(cron="0 0 24 ? * *")
-        public void autoDelete(){
-            List<Ride> allRide = rideRepository.findAll();
-            Date date = new Date();
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
-            c.add(Calendar.DATE,-1);
-            for(Ride i: allRide){
-                if(c.getTime().after(i.getDate())){
-                    rideRepository.delete(i);
-                }
+    @Scheduled(cron="0 0 0 ? * *")
+    public void autoDelete(){
+        List<Ride> allRide = rideRepository.findAll();
+        Date date = new Date();
+        for(Ride i: allRide){
+            if(date.after(i.getDateTime())){
+                rideRepository.delete(i);
             }
         }
     }
+}

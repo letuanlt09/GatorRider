@@ -4,10 +4,8 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.springframework.lang.NonNull;
-
 import javax.persistence.*;
-import java.sql.Time;
-import java.sql.Date;
+import java.sql.Timestamp;
 
 @Entity
 @ToString
@@ -21,12 +19,7 @@ public class Ride {
     @NonNull
     @Getter
     @Setter
-    private Date date;
-
-    @NonNull
-    @Getter
-    @Setter
-    private Time time;
+    private Timestamp dateTime;
 
     @NonNull
     @Getter

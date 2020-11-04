@@ -17,7 +17,7 @@ public class RideRequest {
     private Timestamp dateTime;
     private Timestamp timeFrom;
     private Timestamp timeTo;
-    private String destination;
+    private String location;
     private Boolean isOutBound;
     private String modelName;
     private int modelYear;

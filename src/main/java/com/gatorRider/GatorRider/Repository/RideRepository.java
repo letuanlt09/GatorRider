@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface RideRepository extends JpaRepository<Ride, String> {
     List<Ride> findByDestinationInAndDateBetween(List<String> destinations, Date from, Date to);
+    List<Ride> findByDriverId(String driverId);
 }

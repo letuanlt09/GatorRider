@@ -7,7 +7,10 @@ import com.gatorRider.GatorRider.Repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import java.util.*;
+
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class RideService implements org.hibernate.service.Service {
@@ -30,6 +33,7 @@ public class RideService implements org.hibernate.service.Service {
         ride.setNumSeatAvailable(rideRequest.getNumSeatAvailable());
         ride.setRideIntro(rideRequest.getRideIntro());
         ride.setDriver(driverRepository.getOne(rideRequest.getDriverId()));
+        ride.setIsOutBound(rideRequest.getIsOutBound());
         return rideRepository.save(ride).getId();
     }
     public List<Ride> getMyRide(String driverId){
@@ -44,6 +48,7 @@ public class RideService implements org.hibernate.service.Service {
         ride.setModelYear(rideRequest.getModelYear());
         ride.setNumSeatAvailable(rideRequest.getNumSeatAvailable());
         ride.setRideIntro(rideRequest.getRideIntro());
+        ride.setIsOutBound(rideRequest.getIsOutBound());
         return rideRepository.save(ride).getId();
     }
     public void deleteRide(String rideId){

@@ -27,7 +27,7 @@ public class RideService implements org.hibernate.service.Service {
         Ride ride = new Ride();
         ride.setId(UUID.randomUUID().toString());
         ride.setDateTime(rideRequest.getDateTime());
-        ride.setDestination(rideRequest.getDestination());
+        ride.setLocation(rideRequest.getLocation());
         ride.setModelName(rideRequest.getModelName());
         ride.setModelYear(rideRequest.getModelYear());
         ride.setNumSeatAvailable(rideRequest.getNumSeatAvailable());
@@ -43,7 +43,7 @@ public class RideService implements org.hibernate.service.Service {
         rideRequest.validation();
         Ride ride = rideRepository.getOne(rideRequest.getRideId());
         ride.setDateTime(rideRequest.getDateTime());
-        ride.setDestination(rideRequest.getDestination());
+        ride.setLocation(rideRequest.getLocation());
         ride.setModelName(rideRequest.getModelName());
         ride.setModelYear(rideRequest.getModelYear());
         ride.setNumSeatAvailable(rideRequest.getNumSeatAvailable());

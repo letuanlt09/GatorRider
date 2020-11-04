@@ -24,7 +24,7 @@ public class Ride {
     @NonNull
     @Getter
     @Setter
-    private String destination;
+    private String location;
 
     @NonNull
     @Getter

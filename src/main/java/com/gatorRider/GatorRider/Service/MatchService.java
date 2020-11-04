@@ -23,10 +23,10 @@ public class MatchService implements org.hibernate.service.Service {
 
     public List<Ride> findMatchRide(RideRequest rideRequest) {
         List<Ride> result = new ArrayList<>();
-        List<String> matchDestinations = new ArrayList<>();
-        matchDestinations = rideRequest.getIsOutBound() ? getOutBoundList(rideRequest) : getInBoundList(rideRequest);
+        List<String> matchLocations = new ArrayList<>();
+        matchLocations = rideRequest.getIsOutBound() ? getOutBoundList(rideRequest) : getInBoundList(rideRequest);
 
-        result = rideRepository.findByDestinationInAndDateTimeBetweenAndIsOutBound(matchDestinations,
+        result = rideRepository.findByLocationInAndDateTimeBetweenAndIsOutBound(matchLocations,
                 rideRequest.getTimeFrom(),
                 rideRequest.getTimeTo(),
                 rideRequest.getIsOutBound());
@@ -35,39 +35,39 @@ public class MatchService implements org.hibernate.service.Service {
     }
 
     List<String> getOutBoundList(RideRequest rideRequest) {
-        List<String> matchDestinations = new ArrayList<>();
-        matchDestinations.add(rideRequest.getDestination());
+        List<String> matchLocations = new ArrayList<>();
+        matchLocations.add(rideRequest.getLocation());
 
         for (String[] route : routes) {
             boolean allow = false;
-            for (String destination : route) {
-                if (destination.equals(rideRequest.getDestination())) {
+            for (String location : route) {
+                if (location.equals(rideRequest.getLocation())) {
                     allow = true;
                 }
                 else if (allow) {
-                    matchDestinations.add(destination);
+                    matchLocations.add(location);
                 }
             }
         }
-        return matchDestinations;
+        return matchLocations;
     }
 
     List<String> getInBoundList(RideRequest rideRequest) {
-        List<String> matchDestinations = new ArrayList<>();
-        matchDestinations.add(rideRequest.getDestination());
+        List<String> matchLocations = new ArrayList<>();
+        matchLocations.add(rideRequest.getLocation());
 
         for (String[] route : routes) {
             boolean allow = false;
             for (int i = route.length - 1; i > -1; i--) {
-                if (route[i].equals(rideRequest.getDestination())) {
+                if (route[i].equals(rideRequest.getLocation())) {
                     allow = true;
                 }
                 else if (allow) {
-                    matchDestinations.add(route[i]);
+                    matchLocations.add(route[i]);
                 }
             }
         }
-        return matchDestinations;
+        return matchLocations;
     }
 
 }

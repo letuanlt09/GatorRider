@@ -29,6 +29,11 @@ public class Ride {
     @NonNull
     @Getter
     @Setter
+    private Boolean isOutBound;
+
+    @NonNull
+    @Getter
+    @Setter
     private int numSeatAvailable;
 
     @NonNull

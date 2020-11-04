@@ -17,14 +17,27 @@ public class MatchService implements org.hibernate.service.Service {
     String[][] routes = {
             {"Talahassee"},
             {"Jacksonville"},
-            {"Orlando", "Port St. Lucie", "Miami"},
-            {"Tampa", "Cape Coral", "Miami"}
+            {"Ocala", "Orlando", "Port St. Lucie", "West Palm Beach", "Fort Lauderdale", "Miami"},
+            {"Ocala", "Tampa", "Cape Coral", "Fort Lauderdale", "Miami"}
     };
 
     public List<Ride> findMatchRide(RideRequest rideRequest) {
         List<Ride> result = new ArrayList<>();
         List<String> matchDestinations = new ArrayList<>();
+        matchDestinations = rideRequest.getIsOutBound() ? getOutBoundList(rideRequest) : getInBoundList(rideRequest);
+
+        result = rideRepository.findByDestinationInAndDateTimeBetweenAndIsOutBound(matchDestinations,
+                rideRequest.getTimeFrom(),
+                rideRequest.getTimeTo(),
+                rideRequest.getIsOutBound());
+
+        return result;
+    }
+
+    List<String> getOutBoundList(RideRequest rideRequest) {
+        List<String> matchDestinations = new ArrayList<>();
         matchDestinations.add(rideRequest.getDestination());
+
         for (String[] route : routes) {
             boolean allow = false;
             for (String destination : route) {
@@ -36,26 +49,25 @@ public class MatchService implements org.hibernate.service.Service {
                 }
             }
         }
+        return matchDestinations;
+    }
 
-        Calendar startDay = GregorianCalendar.getInstance();
-        Calendar endDay = GregorianCalendar.getInstance();
+    List<String> getInBoundList(RideRequest rideRequest) {
+        List<String> matchDestinations = new ArrayList<>();
+        matchDestinations.add(rideRequest.getDestination());
 
-        startDay.setTime(rideRequest.getDate());
-        endDay.setTime(rideRequest.getDate());
-        startDay.add(GregorianCalendar.DAY_OF_WEEK, -3 );
-        endDay.add(GregorianCalendar.DAY_OF_WEEK, 3);
-
-        result = rideRepository.findByDestinationInAndDateBetween(matchDestinations,
-                startDay.getTime(),
-                endDay.getTime());
-
-        result.sort(Comparator.comparingInt(a -> Math.abs(a.getDate().compareTo(rideRequest.getDate()))));
-
-        return result;
-//
-//        return result.stream().filter(ride -> {
-//            return (ride.getDate().after(startDay.getTime()) && ride.getDate().before(endDay.getTime()));
-//        }).collect(Collectors.toList());
+        for (String[] route : routes) {
+            boolean allow = false;
+            for (int i = route.length - 1; i > -1; i--) {
+                if (route[i].equals(rideRequest.getDestination())) {
+                    allow = true;
+                }
+                else if (allow) {
+                    matchDestinations.add(route[i]);
+                }
+            }
+        }
+        return matchDestinations;
     }
 
 }

@@ -33,6 +33,7 @@ public class RideService implements org.hibernate.service.Service {
         ride.setNumSeatAvailable(rideRequest.getNumSeatAvailable());
         ride.setRideIntro(rideRequest.getRideIntro());
         ride.setDriver(driverRepository.getOne(rideRequest.getDriverId()));
+        ride.setIsOutBound(rideRequest.getIsOutBound());
         return rideRepository.save(ride).getId();
     }
     public List<Ride> getMyRide(String driverId){
@@ -47,6 +48,7 @@ public class RideService implements org.hibernate.service.Service {
         ride.setModelYear(rideRequest.getModelYear());
         ride.setNumSeatAvailable(rideRequest.getNumSeatAvailable());
         ride.setRideIntro(rideRequest.getRideIntro());
+        ride.setIsOutBound(rideRequest.getIsOutBound());
         return rideRepository.save(ride).getId();
     }
     public void deleteRide(String rideId){

@@ -64,4 +64,15 @@ public class RideController {
                     .body(null);
         }
     }
+
+    @GetMapping("/locations")
+    public ResponseEntity<List<String>> getAllLocation(RideRequest rideRequest) {
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(matchService.getLocations());
+        } catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(null);
+        }
+    }
 }

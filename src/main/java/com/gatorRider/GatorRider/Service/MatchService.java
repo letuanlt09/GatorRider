@@ -6,7 +6,10 @@ import com.gatorRider.GatorRider.Repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MatchService implements org.hibernate.service.Service {
@@ -14,19 +17,36 @@ public class MatchService implements org.hibernate.service.Service {
     @Autowired
     private RideRepository rideRepository;
 
-    String[][] routes = {
-            {"Talahassee"},
+    private String[][] routes = {
+            {"Tallahassee", "Pensacola"},
             {"Jacksonville"},
             {"Ocala", "Orlando", "Port St. Lucie", "West Palm Beach", "Fort Lauderdale", "Miami"},
-            {"Ocala", "Tampa", "Cape Coral", "Fort Lauderdale", "Miami"}
+            {"Ocala", "Tampa", "Cape Coral", "Naples"}
     };
 
+    private String[] locations = {"Miami",
+            "Tampa",
+            "Tallahassee",
+            "Pensacola",
+            "Jacksonville",
+            "Ocala",
+            "Orlando",
+            "Port St. Lucie",
+            "West Palm Beach",
+            "Fort Lauderdale",
+            "Cape Coral",
+            "Naples"
+    };
+
+    public List<String> getLocations() {
+        return Arrays.stream(locations).sorted().collect(Collectors.toList());
+    }
     public List<Ride> findMatchRide(RideRequest rideRequest) {
         List<Ride> result = new ArrayList<>();
         List<String> matchLocations = new ArrayList<>();
         matchLocations = rideRequest.getIsOutBound() ? getOutBoundList(rideRequest) : getInBoundList(rideRequest);
 
-        result = rideRepository.findByLocationInAndDateTimeBetweenAndIsOutBound(matchLocations,
+        result = rideRepository.findByLocationInAndDateTimeBetweenAndIsOutBoundOrderByDateTimeAsc(matchLocations,
                 rideRequest.getTimeFrom(),
                 rideRequest.getTimeTo(),
                 rideRequest.getIsOutBound());

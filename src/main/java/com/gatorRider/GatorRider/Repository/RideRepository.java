@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface RideRepository extends JpaRepository<Ride, String> {
-    List<Ride> findByLocationInAndDateTimeBetweenAndIsOutBound(List<String> destinations,
+    List<Ride> findByLocationInAndDateTimeBetweenAndIsOutBoundOrderByDateTimeAsc(List<String> destinations,
                                                                   Timestamp timeFrom,
                                                                   Timestamp timeTo,
                                                                   Boolean isOutBound);

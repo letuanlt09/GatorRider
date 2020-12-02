@@ -45,6 +45,9 @@ public class MatchService implements org.hibernate.service.Service {
         List<Ride> result = new ArrayList<>();
         List<String> matchLocations = new ArrayList<>();
         matchLocations = rideRequest.getIsOutBound() ? getOutBoundList(rideRequest) : getInBoundList(rideRequest);
+        for(String i: matchLocations){
+            System.out.println(i);
+        }
 
         result = rideRepository.findByLocationInAndDateTimeBetweenAndIsOutBoundOrderByDateTimeAsc(matchLocations,
                 rideRequest.getTimeFrom(),
@@ -74,17 +77,25 @@ public class MatchService implements org.hibernate.service.Service {
 
     List<String> getInBoundList(RideRequest rideRequest) {
         List<String> matchLocations = new ArrayList<>();
-        matchLocations.add(rideRequest.getLocation());
 
         for (String[] route : routes) {
             boolean allow = false;
             for (int i = route.length - 1; i > -1; i--) {
                 if (route[i].equals(rideRequest.getLocation())) {
                     allow = true;
+                    break;
                 }
-                else if (allow) {
-                    matchLocations.add(route[i]);
+            }
+            if(allow){
+                for (int i = route.length - 1; i > -1; i--) {
+                    if (!route[i].equals(rideRequest.getLocation())) {
+                        matchLocations.add(route[i]);
+                    } else {
+                        matchLocations.add(route[i]);
+                        break;
+                    }
                 }
+                break;
             }
         }
         return matchLocations;

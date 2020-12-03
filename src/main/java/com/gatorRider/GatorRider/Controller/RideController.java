@@ -1,6 +1,7 @@
 package com.gatorRider.GatorRider.Controller;
 
 import com.gatorRider.GatorRider.Model.Ride;
+import com.gatorRider.GatorRider.Model.RidePassenger;
 import com.gatorRider.GatorRider.Model.RideRequest;
 import com.gatorRider.GatorRider.Service.MatchService;
 import com.gatorRider.GatorRider.Service.RideService;
@@ -20,7 +21,14 @@ public class RideController {
 
     @Autowired
     MatchService matchService;
-
+    @GetMapping("/listAllPassRide")
+    public List<RidePassenger> getAllPassRide() {
+        return rideService.getAllPassRide();
+    }
+    @GetMapping("/listPassRide/{driverId}")
+    public List<RidePassenger> getPassRide(@PathVariable String driverId) {
+        return rideService.getPassRide(driverId);
+    }
     @GetMapping("/list")
     public List<Ride> getAllRides() {
         return rideService.getAllRides();
@@ -75,4 +83,18 @@ public class RideController {
                     .body(null);
         }
     }
+
+
+    @PostMapping("/reserveSeat")
+    public ResponseEntity<String> updateRide(@RequestBody RidePassenger ridePassenger){
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(rideService.addPassenger(ridePassenger));
+        } catch (Exception e){
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body(e.getMessage());
+        }
+    }
+
+
 }

@@ -21,7 +21,10 @@ public class RideController {
 
     @Autowired
     MatchService matchService;
-
+    @GetMapping("/listAllPassRide")
+    public List<RidePassenger> getAllPassRide() {
+        return rideService.getAllPassRide();
+    }
     @GetMapping("/listPassRide/{driverId}")
     public List<RidePassenger> getPassRide(@PathVariable String driverId) {
         return rideService.getPassRide(driverId);

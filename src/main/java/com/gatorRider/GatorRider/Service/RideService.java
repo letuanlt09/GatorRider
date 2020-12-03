@@ -22,6 +22,9 @@ public class RideService implements org.hibernate.service.Service {
     private DriverRepository driverRepository;
     @Autowired
     private RidePassengerRepository ridePassengerRepository;
+    public List<RidePassenger> getAllPassRide() {
+        return ridePassengerRepository.findAll();
+    }
     public List<Ride> getAllRides() {
         return rideRepository.findAll();
     }

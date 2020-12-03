@@ -1,16 +1,18 @@
 package com.gatorRider.GatorRider.Service;
 
 import com.gatorRider.GatorRider.Model.Ride;
+import com.gatorRider.GatorRider.Model.RidePassenger;
 import com.gatorRider.GatorRider.Model.RideRequest;
 import com.gatorRider.GatorRider.Repository.DriverRepository;
+import com.gatorRider.GatorRider.Repository.RidePassengerRepository;
 import com.gatorRider.GatorRider.Repository.RideRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import java.util.UUID;
 
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class RideService implements org.hibernate.service.Service {
@@ -18,7 +20,8 @@ public class RideService implements org.hibernate.service.Service {
     private RideRepository rideRepository;
     @Autowired
     private DriverRepository driverRepository;
-
+    @Autowired
+    private RidePassengerRepository ridePassengerRepository;
     public List<Ride> getAllRides() {
         return rideRepository.findAll();
     }
@@ -64,5 +67,20 @@ public class RideService implements org.hibernate.service.Service {
                 rideRepository.delete(i);
             }
         }
+    }
+
+    public String addPassenger (RidePassenger ridePassenger) throws Exception{
+            ridePassenger.setId(UUID.randomUUID().toString());
+            Ride tempRide = rideRepository.getOne(ridePassenger.getRideId());
+            if(tempRide.getNumSeatAvailable()>0) {
+                ridePassengerRepository.save(ridePassenger).getRideId();
+                tempRide.setNumSeatAvailable(tempRide.getNumSeatAvailable() - 1);
+                return rideRepository.save(tempRide).getId();
+            }
+            throw new Exception("No more available seat");
+    }
+
+    public List<RidePassenger> getPassRide(String driverId){
+        return ridePassengerRepository.findByPassengerId(driverId);
     }
 }

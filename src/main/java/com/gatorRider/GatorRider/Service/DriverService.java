@@ -20,6 +20,9 @@ public class DriverService implements org.hibernate.service.Service {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private NotificationService notificationService;
+
     public List<Driver> getAllDriver() {
         return driverRepository.findAll();
     }
@@ -51,6 +54,9 @@ public class DriverService implements org.hibernate.service.Service {
 
         driver.setId(UUID.randomUUID().toString());
         driver.setPasswordHash(authService.hashPassWord(driver));
+
+        notificationService.notifyRegistrationBySMS(driver.getPhone());
+        notificationService.publishMessageSuccessFully(driver);
 
         return driverRepository.save(driver).getId();
     }

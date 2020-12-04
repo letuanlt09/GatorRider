@@ -2,6 +2,7 @@ package com.gatorRider.GatorRider.Service;
 
 import com.gatorRider.GatorRider.Model.Driver;
 import com.gatorRider.GatorRider.Repository.DriverRepository;
+import com.gatorRider.GatorRider.data.SMSMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -56,7 +57,8 @@ public class DriverService implements org.hibernate.service.Service {
         driver.setPasswordHash(authService.hashPassWord(driver));
 
         notificationService.notifyRegistrationBySMS(driver.getPhone());
-        notificationService.publishMessageSuccessFully(driver);
+
+        notificationService.sendSMSToOne(driver, SMSMessage.REGISTRATION_SUCCESS_NOTICE);
 
         return driverRepository.save(driver).getId();
     }

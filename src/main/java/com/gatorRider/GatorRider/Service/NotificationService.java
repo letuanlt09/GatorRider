@@ -27,11 +27,19 @@ public class NotificationService implements org.hibernate.service.Service {
         return "+1" + phoneNumber;
     }
 
-    public String publishMessageSuccessFully(Driver driver) {
-        String message = driver.getFullName() +"You just subscribed to GatorRider";
+    public String sendSMSToOne(Driver driver, String message) {
         PublishRequest publishRequest = new PublishRequest().withPhoneNumber(this.formatPhoneNumber(driver.getPhone()))
                 .withMessage(message);
         amazonSNSClient.publish(publishRequest);
+
+        return "Notification send successfully";
+    }
+
+    public String publishSMSToAll(String message) {
+        PublishRequest publishRequest = new PublishRequest().withTopicArn(TOPIC_ARN)
+                .withMessage(message);
+        amazonSNSClient.publish(publishRequest);
+
         return "Notification send successfully";
     }
 }

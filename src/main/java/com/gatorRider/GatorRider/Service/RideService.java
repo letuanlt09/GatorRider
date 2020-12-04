@@ -7,15 +7,13 @@ import com.gatorRider.GatorRider.Model.RideRequest;
 import com.gatorRider.GatorRider.Repository.DriverRepository;
 import com.gatorRider.GatorRider.Repository.RidePassengerRepository;
 import com.gatorRider.GatorRider.Repository.RideRepository;
+import com.gatorRider.GatorRider.data.SMSMessage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.UUID;
-
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class RideService implements org.hibernate.service.Service {
@@ -23,6 +21,8 @@ public class RideService implements org.hibernate.service.Service {
     private RideRepository rideRepository;
     @Autowired
     private DriverRepository driverRepository;
+    @Autowired
+    private NotificationService notificationService;
     @Autowired
     private RidePassengerRepository ridePassengerRepository;
     public List<RidePassenger> getAllPassRide() {
@@ -43,8 +43,30 @@ public class RideService implements org.hibernate.service.Service {
         ride.setRideIntro(rideRequest.getRideIntro());
         ride.setDriver(driverRepository.getOne(rideRequest.getDriverId()));
         ride.setIsOutBound(rideRequest.getIsOutBound());
+
+        notificationService.sendSMSToOne(driverRepository.getOne(rideRequest.getDriverId()),
+                SMSMessage.RIDE_CREATED_TO_DRIVER +
+                        this.getMessageRideInfo(ride));
         return rideRepository.save(ride).getId();
     }
+
+    public String getMessageRideInfo(Ride ride) {
+        String direction;
+        if (ride.getIsOutBound() == true) {
+            direction = "Gainesville -> " + ride.getLocation();
+        }
+        else {
+            direction = ride.getLocation() + " -> Gainesville";
+        }
+        String dateTime = new SimpleDateFormat("MM/dd/yyyy HH:mm").format(ride.getDateTime());
+
+        return direction + "\n" +
+                dateTime + "\n" +
+                ride.getModelYear() + " " +
+                ride.getModelName() + "\n" +
+                "# seats: " + ride.getNumSeatAvailable();
+    }
+
     public List<Ride> getMyRide(String driverId){
         return rideRepository.findByDriverId(driverId);
     }
@@ -58,10 +80,23 @@ public class RideService implements org.hibernate.service.Service {
         ride.setNumSeatAvailable(rideRequest.getNumSeatAvailable());
         ride.setRideIntro(rideRequest.getRideIntro());
         ride.setIsOutBound(rideRequest.getIsOutBound());
+
+        List<Driver> ridePassengers = this.getPassOfRide(rideRequest.getRideId());
+
+        ridePassengers.forEach(passenger -> {
+            notificationService.sendSMSToOne(passenger, SMSMessage.RIDE_INFO_CHANGE_TO_PASSENGER);
+        });
+
+        notificationService.sendSMSToOne(driverRepository.getOne(rideRequest.getDriverId()),
+                SMSMessage.RIDE_INFO_CHANGE_TO_DRIVER);
         return rideRepository.save(ride).getId();
     }
     public void deleteRide(String rideId){
+        Driver driver = rideRepository.getOne(rideId).getDriver();
+        notificationService.sendSMSToOne(driver, SMSMessage.RIDE_REMOVE_TO_DRIVER
+                + this.getMessageRideInfo(rideRepository.getOne(rideId)));
         rideRepository.deleteById(rideId);
+
     }
 
     @Scheduled(cron="0 0 0 ? * *")
@@ -71,6 +106,28 @@ public class RideService implements org.hibernate.service.Service {
         for(Ride i: allRide){
             if(date.after(i.getDateTime())){
                 rideRepository.delete(i);
+            }
+        }
+    }
+
+    @Scheduled(cron="0 0 0 ? * *")
+    public void autoRemind(){
+        Date date = new Date();
+
+        List<Ride> allRide = rideRepository.findAll();
+
+        for(Ride ride: allRide){
+            if(date.equals(ride.getDateTime())){
+                notificationService.sendSMSToOne(ride.getDriver(), SMSMessage.REMIND_1DAY_LEFT
+                + this.getMessageRideInfo(ride));
+                List<RidePassenger> ridePassengers = ridePassengerRepository.findByRideId(ride.getId());
+                for (RidePassenger passenger: ridePassengers) {
+                    notificationService.sendSMSToOne(ride.getDriver(),
+                            SMSMessage.REMIND_1DAY_LEFT
+                            + this.getMessageRideInfo(ride)
+                            + "\nDriver: " + ride.getDriver().getFullName()
+                    );
+                }
             }
         }
     }
@@ -100,8 +157,8 @@ public class RideService implements org.hibernate.service.Service {
             rideIdList.add(i.getRideId());
         }
         return rideRepository.findAllById(rideIdList);
-
     }
+
     public List<Driver> getPassOfRide(String rideId){
         List<RidePassenger> ridePassengers = ridePassengerRepository.findByRideId(rideId);
         List<String> driverIdList = new ArrayList<>();

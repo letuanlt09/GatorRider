@@ -1,5 +1,6 @@
 package com.gatorRider.GatorRider.Controller;
 
+import com.gatorRider.GatorRider.Model.Driver;
 import com.gatorRider.GatorRider.Model.Ride;
 import com.gatorRider.GatorRider.Model.RidePassenger;
 import com.gatorRider.GatorRider.Model.RideRequest;
@@ -21,13 +22,18 @@ public class RideController {
 
     @Autowired
     MatchService matchService;
+
     @GetMapping("/listAllPassRide")
     public List<RidePassenger> getAllPassRide() {
         return rideService.getAllPassRide();
     }
-    @GetMapping("/listPassRide/{driverId}")
-    public List<RidePassenger> getPassRide(@PathVariable String driverId) {
-        return rideService.getPassRide(driverId);
+    @GetMapping("/listMyRideAsPass/{driverId}")
+    public List<Ride> getMyRideAsPass(@PathVariable String driverId) {
+        return rideService.getMyRideAsPass(driverId);
+    }
+    @GetMapping("/listPassOfRide/{rideId}")
+    public List<Driver> getPassOfRide(@PathVariable String rideId) {
+        return rideService.getPassOfRide(rideId);
     }
     @GetMapping("/list")
     public List<Ride> getAllRides() {
@@ -60,6 +66,10 @@ public class RideController {
     @DeleteMapping("/deleteRide/{rideId}")
     public void deleteRide(@PathVariable String rideId){
         rideService.deleteRide(rideId) ;
+    }
+    @DeleteMapping("/deleteReservation")
+    public void deleteReservation(@RequestBody RidePassenger ridePassenger){
+        rideService.deleteReservation(ridePassenger); ;
     }
 
     @GetMapping("/matchRide")

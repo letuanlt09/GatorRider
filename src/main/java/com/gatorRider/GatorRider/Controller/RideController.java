@@ -63,7 +63,7 @@ public class RideController {
                     .body(e.getMessage());
         }
     }
-    @PostMapping("/deleteRide/{rideId}")
+    @DeleteMapping("/deleteRide/{rideId}")
     public void deleteRide(@PathVariable String rideId){
         rideService.deleteRide(rideId) ;
     }

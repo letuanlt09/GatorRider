@@ -95,6 +95,7 @@ public class RideService implements org.hibernate.service.Service {
         Driver driver = rideRepository.getOne(rideId).getDriver();
         notificationService.sendSMSToOne(driver, SMSMessage.RIDE_REMOVE_TO_DRIVER
                 + this.getMessageRideInfo(rideRepository.getOne(rideId)));
+        ridePassengerRepository.deleteByRideId(rideId);
         rideRepository.deleteById(rideId);
 
     }

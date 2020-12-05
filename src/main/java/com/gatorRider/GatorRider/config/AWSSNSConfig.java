@@ -5,6 +5,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.sns.AmazonSNSClient;
 import com.amazonaws.services.sns.AmazonSNSClientBuilder;
+import com.amazonaws.services.sns.model.SetSMSAttributesRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -17,8 +18,13 @@ public class AWSSNSConfig {
     @Primary
     @Bean
     public AmazonSNSClient getSnsClient() {
-        return (AmazonSNSClient) AmazonSNSClientBuilder.standard().withRegion(Regions.US_EAST_1)
+        SetSMSAttributesRequest setSMSAttributesRequest = new SetSMSAttributesRequest()
+                .addAttributesEntry("DefaultSMSType", "Transactional");
+        AmazonSNSClient amazonSNSClient = (AmazonSNSClient) AmazonSNSClientBuilder.standard().withRegion(Regions.US_EAST_1)
                 .withCredentials(new AWSStaticCredentialsProvider(new BasicAWSCredentials(ACCESS_KEY,SECRET_KEY)))
                 .build();
+        amazonSNSClient.setSMSAttributes(setSMSAttributesRequest);
+
+        return amazonSNSClient;
     }
 }

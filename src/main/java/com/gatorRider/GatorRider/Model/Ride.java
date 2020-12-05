@@ -46,7 +46,6 @@ public class Ride {
     @Setter
     private String modelName;
 
-    @NonNull
     @Getter
     @Setter
     private String rideIntro;

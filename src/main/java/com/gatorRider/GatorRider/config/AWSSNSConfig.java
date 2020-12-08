@@ -12,8 +12,8 @@ import org.springframework.context.annotation.Primary;
 
 @Configuration
 public class AWSSNSConfig {
-    private final String ACCESS_KEY = "AKIAIEATV665P4OGHPXQ";
-    private final String SECRET_KEY = "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";
+    private final String ACCESS_KEY = "AKIAJE4ADDOWJPACDLNQ";
+    private final String SECRET_KEY = "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";
 
     @Primary
     @Bean

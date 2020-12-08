@@ -14,7 +14,7 @@ public class NotificationService implements org.hibernate.service.Service {
     @Autowired
     private AmazonSNSClient amazonSNSClient;
 
-    String TOPIC_ARN = "arn:aws:sns:us-east-1:296145007075:GatorRider1";
+    String TOPIC_ARN = "arn:aws:sns:us-east-1:531600385408:gatorRi";
 
     public String notifyRegistrationBySMS(String phoneNumber) throws URISyntaxException {
         SubscribeRequest subscribeRequest = new SubscribeRequest(TOPIC_ARN, "SMS",

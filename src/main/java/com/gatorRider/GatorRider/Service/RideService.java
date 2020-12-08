@@ -196,7 +196,13 @@ public class RideService implements org.hibernate.service.Service {
             notificationService.sendSMSToOne(driverRepository.getOne(ridePassenger.getPassengerId()),
                     SMSMessage.NOTIFY_PASSENGER_WHEN_RIDERESERVE_IS_REMOVED
             );
+            //update seat
             ridePassengerRepository.deleteById(i.getId());
+            Ride tempRide = rideRepository.getOne(ridePassenger.getRideId());
+            tempRide.setNumSeatAvailable(tempRide.getNumSeatAvailable() + 1);
+            rideRepository.save(tempRide);
+            System.out.println(tempRide);
+
         }
     }
 }

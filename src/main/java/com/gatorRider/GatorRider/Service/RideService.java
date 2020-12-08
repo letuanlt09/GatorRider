@@ -144,15 +144,17 @@ public class RideService implements org.hibernate.service.Service {
                 ridePassenger.setId(UUID.randomUUID().toString());
                 ridePassengerRepository.save(ridePassenger).getRideId();
                 tempRide.setNumSeatAvailable(tempRide.getNumSeatAvailable() - 1);
-                notificationService.sendSMSToOne(tempRide.getDriver(),
-                        driverRepository.getOne(ridePassenger.getPassengerId())
-                        + SMSMessage.NOTIFY_PASSENGER_WHEN_RIDE_IS_RESERVED
-                                + this.getMessageRideInfo(tempRide)
-                );
-                notificationService.sendSMSToOne(tempRide.getDriver(),
-                        SMSMessage.NOTIFY_DRIVER_WHEN_RIDE_IS_RESERVED
+                //notify passenger
+                notificationService.sendSMSToOne(driverRepository.getOne(ridePassenger.getPassengerId()),
+                        SMSMessage.NOTIFY_PASSENGER_WHEN_RIDE_IS_RESERVED
                                 + this.getMessageRideInfo(tempRide)
                                 + "\nDriver: " + tempRide.getDriver().getFullName()
+                );
+                //notify driver
+                notificationService.sendSMSToOne(tempRide.getDriver(),
+                        driverRepository.getOne(ridePassenger.getPassengerId())
+                                + SMSMessage.NOTIFY_DRIVER_WHEN_RIDE_IS_RESERVED
+                                + this.getMessageRideInfo(tempRide)
                 );
                 return rideRepository.save(tempRide).getId();
             }

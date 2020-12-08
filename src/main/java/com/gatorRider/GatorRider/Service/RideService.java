@@ -185,7 +185,7 @@ public class RideService implements org.hibernate.service.Service {
         List<RidePassenger> list = ridePassengerRepository.findByRideId(ridePassenger.getRideId());
 
         //notify driver
-        notificationService.sendSMSToOne(driverRepository.getOne(ridePassenger.getPassengerId()),
+        notificationService.sendSMSToOne(rideRepository.getOne(ridePassenger.getRideId()).getDriver(),
                 driverRepository.getOne(ridePassenger.getPassengerId()).getFullName()
                         + SMSMessage.NOTIFY_DRIVER_WHEN_RIDERESERVE_IS_REMOVED
                         + this.getMessageRideInfo(rideRepository.getOne(ridePassenger.getRideId()))

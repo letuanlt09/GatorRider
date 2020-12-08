@@ -152,7 +152,7 @@ public class RideService implements org.hibernate.service.Service {
                 );
                 //notify driver
                 notificationService.sendSMSToOne(tempRide.getDriver(),
-                        driverRepository.getOne(ridePassenger.getPassengerId())
+                        driverRepository.getOne(ridePassenger.getPassengerId()).getFullName()
                                 + SMSMessage.NOTIFY_DRIVER_WHEN_RIDE_IS_RESERVED
                                 + this.getMessageRideInfo(tempRide)
                 );
@@ -182,7 +182,19 @@ public class RideService implements org.hibernate.service.Service {
     }
     public void deleteReservation(RidePassenger ridePassenger){
         List<RidePassenger> list = ridePassengerRepository.findByRideId(ridePassenger.getRideId());
+
+        //notify driver
+        notificationService.sendSMSToOne(driverRepository.getOne(ridePassenger.getPassengerId()),
+                driverRepository.getOne(ridePassenger.getPassengerId()).getFullName()
+                        + SMSMessage.NOTIFY_DRIVER_WHEN_RIDERESERVE_IS_REMOVED
+                        + this.getMessageRideInfo(rideRepository.getOne(ridePassenger.getRideId()))
+        );
+
         for(RidePassenger i: list){
+            //notify passenger
+            notificationService.sendSMSToOne(driverRepository.getOne(ridePassenger.getPassengerId()),
+                    SMSMessage.NOTIFY_PASSENGER_WHEN_RIDERESERVE_IS_REMOVED
+            );
             ridePassengerRepository.deleteById(i.getId());
         }
     }

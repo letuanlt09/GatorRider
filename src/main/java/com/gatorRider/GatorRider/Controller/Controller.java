@@ -25,7 +25,7 @@ public class Controller {
 		String password = tryUser.password;
 
 		String sql = "INSERT INTO trial (email, password) " + "VALUES (?,?)";
-		String connectionString = "jdbc:sqlserver://cis4914.database.windows.net:1433;database=cis4914;user=cis4914@cis4914;password=gatorRider$;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
+		String connectionString = "";
 		try
 		{
 //			Class.forName("com.mysql.jdbc.Driver");
